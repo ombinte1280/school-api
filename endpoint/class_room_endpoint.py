@@ -12,18 +12,19 @@ class ClassRoomEndpoint:
         self._app = app
         self.register_routes()
 
-
     def register_routes(self):
         self._app.add_api_route("/classes/", self.create_class, methods=["POST"], response_model=ClassRoom)
         self._app.add_api_route("/classes/", self.get_all_classrooms, methods=["GET"], response_model=List[ClassRoom])
         self._app.add_api_route("/classes/{class_id}", self.get_class_room, methods=["GET"], response_model=ClassRoom)
-        self._app.add_api_route("/classes/{class_id}", self.update_class_room, methods=["PUT"], response_model=ClassRoom)
+        self._app.add_api_route("/classes/{class_id}", self.update_class_room, methods=["PUT"],response_model=ClassRoom)
+        self._app.add_api_route("/classes/{class_id}/", self.update_class_room, methods=["PUT"],response_model=ClassRoom)
         self._app.add_api_route("/classes/{class_id}", self.delete_class_room, methods=["DELETE"])
 
     async def create_class(self, class_room: ClassRoom):
         for c in self._data_set.classes:
             if c.id == class_room.id:
                 raise HTTPException(status_code=400, detail="class already exists!!")
+        class_room.id = len(self._data_set.classes) + 1
         self._data_set.classes.append(class_room)
         return class_room
 

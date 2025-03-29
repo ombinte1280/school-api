@@ -24,6 +24,7 @@ class ProfessorEnpoint:
         for p in self._data_set.professors:
             if p.id == professor.id:
                 raise HTTPException(status_code=400, detail="Professor already exists!!")
+        professor.id = len(self._data_set.professors) + 1
         self._data_set.professors.append(professor)
         return professor
 
